@@ -28,7 +28,7 @@ This repo contains starter code that compares a Bloom filter against a hash set,
 which  is used  as a baseline  to report  each  Bloom  filter  lookup  as a true
 negative,  false positive, etc.  The starter code will handle the testing logic,
 input,  and output  for you,  but you'll need  to implement the  data structures
-and hash functions yourself:
+yourself:
 
 - You'll find the `BloomFilter` class declared in `BloomFilter.h`;  implement it
   in `BloomFilter.cpp`.
@@ -36,13 +36,6 @@ and hash functions yourself:
   will be compared against. Implement it in `HashSet.cpp`. Note that it's a set,
   not a map, and that you only need to implement insertion and lookup.  Use open
   address hashing with a hash function and probing scheme of your choice.
-- The  `StringHashes.h`  header file contains  class declarations  for functions
-  used to map  arbitrary-length strings  to integers.  The comments in that file
-  explain the functions used.  Implement these in `StringHashes.cpp`.
-- The `IntegerHashes.h` file contains class declarations for hash functions that
-  map arbitrary integers to integers in a given range (for use in a Bloom filter
-  or hash table). The comments explain how each function works.  Implement these
-  in `IntegerHashes.cpp`.
 
 Turn in your code  on Gradescope.  The automated tests  will make sure that your
 code behaves as expected.  You will also be graded on coding style.
