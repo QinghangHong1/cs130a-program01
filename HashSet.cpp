@@ -32,6 +32,7 @@ void HashSet::insert(const string& value){
    
     if(slots[hashValue] == NULL){
        slots[hashValue] = new string(value);
+    //    cout << "insert " << value << " during the first attempt at " << hashValue << endl;
     }else{
         int newHashValue = hashValue;
         while(slots[newHashValue] != NULL){
@@ -39,6 +40,7 @@ void HashSet::insert(const string& value){
             newHashValue = (newHashValue + 1) % nslots;
         }
         slots[newHashValue] = new string(value);
+        // cout <<"Inserting " << value << " at " << newHashValue << "th slot" << endl; 
     }
     nitems ++;
 
@@ -47,19 +49,19 @@ bool HashSet::lookup(const string& value) const{
     uint64_t stringToIntHash = strfn -> hash(value);
     uint64_t hashValue = intfn -> hash(stringToIntHash) % nslots;
     if(slots[hashValue] == NULL){
-        // cout << value << " not found";
+        cout << value << " not found";
         return false;
     }else if(*slots[hashValue] == value){
-        // cout << value << " found" << endl;
+        cout << value << " found" << endl;
         return true;
     }else{
 
         uint64_t newHashValue = (hashValue + 1) % nslots;
         while(slots[newHashValue] != NULL){
-           
+            // cout << "Looking at " << newHashValue << "th slot" << endl;
             if(*slots[newHashValue] != value){
                 
-                newHashValue = (hashValue + 1) % nslots;
+                newHashValue = (newHashValue + 1) % nslots;
             }else{
                 
                 return true;
