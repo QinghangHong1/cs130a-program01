@@ -26,20 +26,17 @@ void HashSet::insert(const string& value){
     if(nitems * 2 >= nslots){
         rehash();
     }
-   
     uint64_t stringToIntHash = strfn -> hash(value);
     
     uint64_t hashValue = intfn -> hash(stringToIntHash) % nslots;
    
     if(slots[hashValue] == NULL){
-       
-        slots[hashValue] = new string(value);
+       slots[hashValue] = new string(value);
     }else{
-        int n = 1;
         int newHashValue = hashValue;
         while(slots[newHashValue] != NULL){
-            newHashValue = (hashValue + n) % nslots;
-            n++;
+            // cout << "The " << newHashValue << "th slot is taken" << endl;
+            newHashValue = (newHashValue + 1) % nslots;
         }
         slots[newHashValue] = new string(value);
     }
@@ -47,19 +44,24 @@ void HashSet::insert(const string& value){
 
 }
 bool HashSet::lookup(const string& value) const{
-    int stringToIntHash = strfn -> hash(value);
-    int hashValue = intfn -> hash(stringToIntHash) % nslots;
+    uint64_t stringToIntHash = strfn -> hash(value);
+    uint64_t hashValue = intfn -> hash(stringToIntHash) % nslots;
     if(slots[hashValue] == NULL){
+        // cout << value << " not found";
         return false;
+    }else if(*slots[hashValue] == value){
+        // cout << value << " found" << endl;
+        return true;
     }else{
-        int newHashValue = hashValue + 1;
-        int n = 2;
+
+        uint64_t newHashValue = (hashValue + 1) % nslots;
         while(slots[newHashValue] != NULL){
-            cout << "During look up " << newHashValue << endl;
+           
             if(*slots[newHashValue] != value){
-                newHashValue = (hashValue + n) % nslots;
-                n++;
+                
+                newHashValue = (hashValue + 1) % nslots;
             }else{
+                
                 return true;
             }
         }
@@ -80,11 +82,9 @@ void HashSet::rehash(){
             if(newTable[hashValue] == NULL){
                 newTable[hashValue] = new string(value);
             }else{
-                int n = 1;
                 int newHashValue = hashValue;
                 while(newTable[hashValue] != NULL){
-                    newHashValue = (hashValue + n) % newNslots ; 
-                    n ++;
+                    newHashValue = (newHashValue + 1) % newNslots ; 
                 }
                 newTable[newHashValue] = new string(value);
             }
