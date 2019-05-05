@@ -85,6 +85,12 @@ void HashSet::rehash(){
         }
     }
     slots = newTable;
+    for(int i = 0; i < nslots; i++){
+        if(slots[i] != NULL){
+            delete slots[i];
+        }
+    }
+    delete []slots;
     nslots = newNslots;
 
 }

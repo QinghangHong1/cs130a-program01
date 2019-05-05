@@ -8,25 +8,25 @@ BloomFilter::BloomFilter(int k, int m, string strfn, string intfn){
     this -> m = m;
     bits = new uint64_t;
     *bits = *bits & 0;
-    if(strfn == "JenkinsHash"){
+    if(strfn == "jenkins"){
         this -> strfn = new JenkinsHash();
     }
-    if(strfn == "PearsonHash"){
+    if(strfn == "pearson"){
         this -> strfn = new PearsonHash();
     }else{
         cerr << "Not a valid stringHash" << endl;
         exit(1);
     }
     this -> intfns = new IntegerHash*[k];
-    if(intfn == "DivisionHash"){
+    if(intfn == "divisionHash"){
         for(int i = 0; i < k; i++){
         this -> intfns[i] = new DivisionHash(i, m);
         }
-    }else if(intfn == "ReciprocalHash"){
+    }else if(intfn == "reciprocal"){
         for(int i = 0; i < k; i++){
             this -> intfns[i] = new ReciprocalHash(i, m);
         }
-    }else if(intfn == "SquareRootHash"){
+    }else if(intfn == "squareRoot"){
         for(int i = 0; i < k; i++){
             this -> intfns[i] = new SquareRootHash(i, m);
         }
