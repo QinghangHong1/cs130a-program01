@@ -49,26 +49,39 @@ BloomFilter::~BloomFilter(){
 void BloomFilter::insert(const string& value){
     uint64_t stringHashValue = strfn ->  hash(value);
     for(int i = 0; i < k; i++){
-        int intHash = intfns[i]-> hash(stringHashValue);
-        int index = intHash % m;
-        // cout << "setting the " << index << "th elements " << digit <<"th"<< "bit to 0" << endl;
-        // *bits = *bits | (1 << (index));
+        uint64_t intHash = intfns[i]-> hash(stringHashValue);
+        uint64_t index = intHash % (m);
         bits[index] = 1;
+        // int index = (intHash / 64) % m;
+        // int position = index % 64;
+        // cout << "beforechange " << bitset<64>(bits[index]) << endl;
+        // cout << "setting " << position << "th bit to 1" << endl;
+        // bits[index] |= (1 << position);
+        // cout << "After change " <<bitset<64>(bits[index]) << endl;
+       
     }
 
 }
 bool BloomFilter::lookup(const string& value) const{
     uint64_t stringHashValue = strfn -> hash(value);
     for(int i = 0; i < k; i++){
-        int intHash = intfns[i]-> hash(stringHashValue);
-        // cout << "The hash is " << intHash << endl;
-        int index = intHash % m;
-        // cout << "setting the " << index << "th elements " << digit <<"th"<< "bit to 1" << endl;
-        //uint64_t bit = 1 << digit;
+        uint64_t intHash = intfns[i]-> hash(stringHashValue);
+        // int index = (intHash / 64) % m;
+        // int position = index % 64;
+        // if(!(bits[index] & (1 << position))){
+        //     return false;
+        // }
+        uint64_t index = intHash % m; 
         if (bits[index] == 0){
             return false;
         }
-        // if((bits[index] & bit) == 0){
+        // uint64_t index = intHash % (m * 64);
+        // uint64_t digit = index / 64;
+        // int numBit = index - digit *  64;
+        // cout << "the bit are " << bitset<64>(bits[digit]) << endl;
+        // uint64_t a = bits[digit] & (1 << numBit);
+        // cout << "Compare bits are " << bitset<64>(a) << endl;
+        // if(!a){
         //     return false;
         // }
     }
