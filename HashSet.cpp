@@ -23,6 +23,7 @@ HashSet::~HashSet(){
     delete []slots;
 }
 void HashSet::insert(const string& value){
+    cout << "In insert" << endl;
     if(nslots / 2 <= nitems){
         rehash();
     }
@@ -46,8 +47,8 @@ void HashSet::insert(const string& value){
 
 }
 bool HashSet::lookup(const string& value) const{
+    cout << "In lookup" << endl;
     uint64_t stringToIntHash = strfn -> hash(value);
-
     uint64_t hashValue = intfn -> hash(stringToIntHash) % nslots;
 
     if(slots[hashValue] == NULL){
@@ -73,7 +74,7 @@ bool HashSet::lookup(const string& value) const{
     }
 }
 void HashSet::rehash(){
-    // cout << "In rehash" << endl;
+    cout << "In rehash" << endl;
     string** newTable = new string* [nslots * 2 + 1];
     int newNslots = nslots * 2 + 1;
     // cout << "old nslots = " << nslots << endl;
