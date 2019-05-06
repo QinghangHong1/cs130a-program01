@@ -9,7 +9,7 @@ BloomFilter::BloomFilter(int k, int m, string strfn, string intfn){
     this -> m = m;
     bits = new uint64_t[m / 64 + 1];
     for(int i = 0; i < (m / 64 +1); i++){
-        bits[i] = 0;
+        bits[i] = uint64_t(0);
     }
     if(strfn == "jenkins"){
         this -> strfn = new JenkinsHash();
