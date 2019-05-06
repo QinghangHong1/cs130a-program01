@@ -24,7 +24,7 @@ BloomFilter::BloomFilter(int k, int m, string strfn, string intfn){
         for(int i = 0; i < k; i++){
         this -> intfns[i] = new DivisionHash(i, m);
         }
-    }else if(intfn == "reciprocal"){
+    }else if(intfn == "reciprocal"){ 
         for(int i = 0; i < k; i++){
             this -> intfns[i] = new ReciprocalHash(i, m);
         }
@@ -50,18 +50,18 @@ void BloomFilter::insert(const string& value){
     uint64_t stringHashValue = strfn ->  hash(value);
     for(int i = 0; i < k; i++){
         uint64_t intHash = intfns[i]-> hash(stringHashValue);
-        uint64_t index = (intHash / 64) ;
+        uint64_t index = (intHash / 64);
         int position = index % 64;
-        bits[index] |= (1 << position);
+        bits[index] |= (uint64_t(1) << position);
     }
 }
 bool BloomFilter::lookup(const string& value) const{
     uint64_t stringHashValue = strfn -> hash(value);
     for(int i = 0; i < k; i++){
         uint64_t intHash = intfns[i]-> hash(stringHashValue);
-        uint64_t index = (intHash / 64) ;
+        uint64_t index = (intHash / 64);
         uint64_t digit = index % 64;
-        if((bits[index] &= (1 << (digit))) != 1){
+        if((bits[index] & (uint64_t(1) << (digit))) == 0){
             return false;
         }
     }
