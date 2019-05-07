@@ -75,7 +75,7 @@ bool HashSet::lookup(const string& value) const{
     
 }
 void HashSet::rehash(){
-    cout << "In rehash" << endl;
+    // cout << "In rehash" << endl;
     delete intfn;
     string** oldTable = slots;
     int oldslot = nslots;
