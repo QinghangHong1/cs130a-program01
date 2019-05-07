@@ -52,18 +52,24 @@ void BloomFilter::insert(const string& value){
         uint64_t intHash = intfns[i]-> hash(stringHashValue);
         uint64_t index = (intHash / 64);
         int position = intHash % 64;
-        bits[index] |= (uint64_t(1) << position);
+        uint64_t one = 1;
+        uint64_t k = (one << position);
+        bits[index] |= k;
     }
 }
 bool BloomFilter::lookup(const string& value) const{
     uint64_t stringHashValue = strfn -> hash(value);
     for(int i = 0; i < k; i++){
         uint64_t intHash = intfns[i]-> hash(stringHashValue);
-        uint64_t index = (intHash / 64);
-        uint64_t digit = intHash % 64;
-        if((bits[index] & (uint64_t(1) << (digit))) == 0){
+        int index = (intHash / 64);
+        int digit = intHash % 64;
+        uint64_t temp = bits[index];
+        temp >>= digit;
+        uint64_t k = 1;
+        if((temp & k) == 0){
             return false;
         }
+
     }
     return true;
 }

@@ -23,7 +23,7 @@ HashSet::~HashSet(){
     delete []slots;
 }
 void HashSet::insert(const string& value){
-    cout << "In insert" << endl;
+    // cout << "In insert" << endl;
     if(nslots / 2 <= nitems){
         rehash();
     }
