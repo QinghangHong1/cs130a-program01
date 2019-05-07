@@ -1,4 +1,4 @@
-#include <cstdlib>
+ #include <cstdlib>
 #include <iostream>
 #include <bitset>
 #include "BloomFilter.h"
@@ -7,8 +7,9 @@ using namespace std;
 BloomFilter::BloomFilter(int k, int m, string strfn, string intfn){
     this -> k = k;
     this -> m = m;
-    bits = new uint64_t[m / 64 + 1];
-    for(int i = 0; i < (m / 64 +1); i++){
+    int n = m / 64 + 1;
+    bits = new uint64_t[n];
+    for(int i = 0; i < (n); i++){
         bits[i] = uint64_t(0);
     }
     if(strfn == "jenkins"){

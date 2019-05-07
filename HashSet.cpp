@@ -13,6 +13,7 @@ HashSet::HashSet(){
     }
 }
 HashSet::~HashSet(){
+    // cout << "In destructor" << endl;
     delete intfn;
     delete strfn;
     for(int i = 0; i < nslots; i++){
@@ -27,94 +28,76 @@ void HashSet::insert(const string& value){
     if(nslots / 2 <= nitems){
         rehash();
     }
+   
     uint64_t stringToIntHash = strfn -> hash(value);
     
     uint64_t hashValue = intfn -> hash(stringToIntHash) % nslots;
-   
-    if(slots[hashValue] == NULL){
-       slots[hashValue] = new string(value);
-    //    cout << "insert " << value << " during the first attempt at " << hashValue << endl;
-    }else{
-        int newHashValue = hashValue;
-        while(slots[newHashValue] != NULL){
-            // cout << "The " << newHashValue << "th slot is taken" << endl;
-            newHashValue = (newHashValue + 1) % nslots;
-        }
-        slots[newHashValue] = new string(value);
-        // cout <<"Inserting " << value << " at " << newHashValue << "th slot" << endl; 
+    if(lookup(value)){
+        return;
     }
     nitems ++;
 
+    if(slots[hashValue] == NULL){
+        slots[hashValue] = new string(value);
+        return;
+    }
+    while(slots[hashValue] != NULL){
+        hashValue = (hashValue + 1) % nslots;
+    }
+    slots[hashValue] = new string(value);
+    // if(slots[hashValue] == NULL){
+    //    slots[hashValue] = new string(value);
+    // //    cout << "insert " << value << " during the first attempt at " << hashValue << endl;
+    // }else{
+    //     int newHashValue = hashValue;
+    //     while(slots[newHashValue] != NULL){
+    //         // cout << "The " << newHashValue << "th slot is taken" << endl;
+    //         newHashValue = (newHashValue + 1) % nslots;
+    //     }
+    //     slots[newHashValue] = new string(value);
+    //     // cout <<"Inserting " << value << " at " << newHashValue << "th slot" << endl; 
+    // }
+    
+
 }
 bool HashSet::lookup(const string& value) const{
-    cout << "In lookup" << endl;
+    // cout << "In lookup" << endl;
     uint64_t stringToIntHash = strfn -> hash(value);
     uint64_t hashValue = intfn -> hash(stringToIntHash) % nslots;
 
-    if(slots[hashValue] == NULL){
-        // cout << value << " not found";
-        return false;
-    }else if(*slots[hashValue] == value){
-        // cout << value << " found" << endl;
-        return true;
-    }else{
-
-        uint64_t newHashValue = (hashValue) % nslots;
-        while(slots[newHashValue] != NULL){
-            // cout << "Looking at " << newHashValue << "th slot" << endl;
-            if(*(slots[newHashValue]) != value){
-                // cout << "value not matched" << endl;
-                newHashValue = (newHashValue + 1) % nslots;
-            }else{
-                // cout << "matched" << endl;
-                return true;
-            }
+    while(slots[hashValue] != NULL){
+        if(*slots[hashValue] == value){
+            return true;
         }
-        return false;
+        hashValue = (hashValue + 1) % nslots;
     }
+    return false;
+    
 }
 void HashSet::rehash(){
     cout << "In rehash" << endl;
-    string** newTable = new string* [nslots * 2 + 1];
-    int newNslots = nslots * 2 + 1;
+    string** oldTable = slots;
+    int oldslot = nslots;
+    nslots = oldslot * 2 + 1;
+    slots = new string* [nslots];
+   
+    
     // cout << "old nslots = " << nslots << endl;
     // cout << "new nslots = " << newNslots << endl;
-    for(int i = 0; i < newNslots; i++){
-        newTable[i] = NULL;
+    for(int i = 0; i < nslots; i++){
+        slots[i] = NULL;
         
     }
-    for(int i = 0; i < nslots; i++){
-        if(slots[i] != NULL){
-            // cout << i <<"th element is " << *slots[i] << endl;
-            string value = *slots[i];
-            // cout << "The " << i << "th value in the old table is " << value << endl;
-            uint64_t stringToIntHash = strfn -> hash(value);
-            uint64_t hashValue = intfn -> hash(stringToIntHash) % newNslots;
-            // cout << "hashValue is " << hashValue << endl;
-            if(newTable[hashValue] == NULL){
-                newTable[hashValue] = new string(value);
-                // cout << "Insert " << *newTable[hashValue] << "at " << hashValue << "th slot in the new table" << endl;
-            }else{
-                uint64_t newHashValue = hashValue;
-                while(newTable[newHashValue] != NULL){
-                    // cout << newHashValue << " is taken" << endl;
-                    newHashValue = (newHashValue + 1) % newNslots ; 
-                    
-                }
-                newTable[newHashValue] = new string(value);
-                // cout << "Inserting " << value << " at " << newHashValue << endl;
-            }
+    for(int i = 0; i < oldslot; i++){
+        if(oldTable[i] != NULL){
+            insert(*oldTable[i]);
         }
     }
-    string** temp = slots;
-    slots = newTable;
-    for(int i = 0; i < nslots; i++){
-        if(temp[i] != NULL){
-            delete temp[i];
+    for(int i = 0; i < oldslot; i++){
+        if(oldTable[i] != NULL){
+            delete oldTable[i];
         }
     }
-    delete []temp;
-    
-    nslots = newNslots;
+    delete []oldTable;
 
 }

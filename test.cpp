@@ -15,7 +15,7 @@ int main(int argc, char* argv[]){
         if(ifs.fail()){
             cerr << "Open file failed" << endl;
         }
-        BloomFilter* s = new BloomFilter(5, 15000, "jenkins", "squareroot"); 
+        BloomFilter* s = new BloomFilter(10, 15000, "jenkins", "squareroot"); 
         string value;
         while(getline(ifs, value)){
             // cout << "Insert " << value << endl;
@@ -26,11 +26,11 @@ int main(int argc, char* argv[]){
         }
         ifs.close();
         delete s;
-        BloomFilter s1(6,15000, "jenkins", "squareroot");
-        for(int i = 0; i < 100000; i ++){
+        BloomFilter s1(6,50000, "jenkins", "squareroot");
+        for(int i = 0; i < 10000; i ++){
             // cout << "Insert " << i << endl;
             s1.insert(to_string(i));
-            if(s1.lookup(to_string(i + 10))){
+            if(s1.lookup(to_string(i + 100))){
                 cout << "Failed 2" << endl;
             }
             if(i != 0 & !s1.lookup(to_string(i - 1))){
