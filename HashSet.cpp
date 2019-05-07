@@ -26,46 +26,26 @@ HashSet::~HashSet(){
 void HashSet::insert(const string& value){
     // cout << "In insert" << endl;
     
-   
-    
     if(lookup(value)){
         return;
     }
+    nitems ++;
     if(nitems / double(nslots) > 0.4){
         rehash();
     }
     uint64_t stringToIntHash = strfn -> hash(value);
     
-    uint64_t hashValue = intfn -> hash(stringToIntHash) % nslots;
-    nitems ++;
-
-    if(slots[hashValue] == NULL){
-        slots[hashValue] = new string(value);
-        return;
-    }
+    uint64_t hashValue = intfn -> hash(stringToIntHash);
+    
     while(slots[hashValue] != NULL){
         hashValue = (hashValue + 1) % nslots;
     }
     slots[hashValue] = new string(value);
-    // if(slots[hashValue] == NULL){
-    //    slots[hashValue] = new string(value);
-    // //    cout << "insert " << value << " during the first attempt at " << hashValue << endl;
-    // }else{
-    //     int newHashValue = hashValue;
-    //     while(slots[newHashValue] != NULL){
-    //         // cout << "The " << newHashValue << "th slot is taken" << endl;
-    //         newHashValue = (newHashValue + 1) % nslots;
-    //     }
-    //     slots[newHashValue] = new string(value);
-    //     // cout <<"Inserting " << value << " at " << newHashValue << "th slot" << endl; 
-    // }
-    
-
 }
 bool HashSet::lookup(const string& value) const{
     // cout << "In lookup" << endl;
     uint64_t stringToIntHash = strfn -> hash(value);
-    uint64_t hashValue = intfn -> hash(stringToIntHash) % nslots;
+    uint64_t hashValue = intfn -> hash(stringToIntHash);
 
     while(slots[hashValue] != NULL){
         if(*slots[hashValue] == value){
@@ -78,8 +58,9 @@ bool HashSet::lookup(const string& value) const{
 }
 void HashSet::rehash(){
     // cout << "In rehash" << endl;
-    delete intfn;
+    
     int oldslot = nslots;
+    delete intfn;
     nslots = oldslot * 2;
     intfn = new DivisionHash(3,nslots);
     string** oldTable = slots;
