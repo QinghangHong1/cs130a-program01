@@ -76,9 +76,11 @@ bool HashSet::lookup(const string& value) const{
 }
 void HashSet::rehash(){
     cout << "In rehash" << endl;
+    delete intfn;
     string** oldTable = slots;
     int oldslot = nslots;
     nslots = oldslot * 2 + 1;
+    intfn = new SquareRootHash(10,nslots);
     slots = new string* [nslots];
    
     
