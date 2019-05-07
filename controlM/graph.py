@@ -19,7 +19,8 @@ def loadData(jd, jr, js, pd, pr, ps, counter):
     plt.plot(x,pdData, label ="Pearson and Division", linewidth = l)
     plt.plot(x,prData, label ="Pearson and Reciprocal", linewidth = l)
     plt.plot(x,psData, label ="Pearson and SquareRoot", linewidth = l)
-
+    plt.yticks(np.arange(0, 1, 0.05))
+    plt.xticks(np.arange(0, 700, 50))
     plt.legend(loc='upper right')
 
     plt.xlabel("Number of bits used")
