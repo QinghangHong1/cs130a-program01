@@ -1,15 +1,14 @@
- #include <cstdlib>
+#include <cstdlib>
 #include <iostream>
-#include <bitset>
 #include "BloomFilter.h"
 
 using namespace std;
 BloomFilter::BloomFilter(int k, int m, string strfn, string intfn){
     this -> k = k;
     this -> m = m;
-    int n = m / 64 + 1;
-    bits = new uint64_t[n];
-    for(int i = 0; i < (n); i++){
+    int j = (m / 64) + 1;
+    bits = new uint64_t[j];
+    for(int i = 0; i < (j); i++){
         bits[i] = uint64_t(0);
     }
     if(strfn == "jenkins"){

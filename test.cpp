@@ -15,10 +15,9 @@ int main(int argc, char* argv[]){
         if(ifs.fail()){
             cerr << "Open file failed" << endl;
         }
-        BloomFilter* s = new BloomFilter(10, 15000, "jenkins", "squareroot"); 
+        BloomFilter* s = new BloomFilter(5, 15000, "jenkins", "squareroot"); 
         string value;
         while(getline(ifs, value)){
-            // cout << "Insert " << value << endl;
             s -> insert(value);
             if(!s -> lookup(value)){
                 cout << "Failed 1" << endl;
@@ -26,7 +25,7 @@ int main(int argc, char* argv[]){
         }
         ifs.close();
         delete s;
-        BloomFilter s1(6,50000, "jenkins", "squareroot");
+        HashSet s1;
         for(int i = 0; i < 10000; i ++){
             // cout << "Insert " << i << endl;
             s1.insert(to_string(i));
